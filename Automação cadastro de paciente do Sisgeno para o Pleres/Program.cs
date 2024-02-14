@@ -15,6 +15,8 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 
             Console.WriteLine(dataAtual.ToString("dd/MM/yyyy"));
             webBot.BaixarXMLSisgeno("https://sisgeno.aids.gov.br/", dataAtual);
+
+            webBot.InserirXMLNoGenConectPleres("genconect");
             Console.ReadKey();
         }
     }

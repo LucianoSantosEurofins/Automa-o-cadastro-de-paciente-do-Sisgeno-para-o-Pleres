@@ -23,7 +23,16 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             txtCPF.SendKeys("73298097055");
             txtSenha.SendKeys("Senha"); 
                        
-            //webDriver.Quit();
+            webDriver.Quit();
+        }
+
+        public void InserirXMLNoGenConectPleres(string genConectLink) 
+        {
+            WebDriver webDriver = new OpenQA.Selenium.Edge.EdgeDriver();
+            webDriver.Navigate().GoToUrl(genConectLink);
+
+            //IWebElement btnLaboratorio = webDriver.FindElement(By.XPath(""));
+            //btnLaboratorio.Click();
         }
     }
 }
