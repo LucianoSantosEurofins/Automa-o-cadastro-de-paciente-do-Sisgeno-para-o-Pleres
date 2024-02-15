@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 {
@@ -13,10 +14,12 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             var dataAtual = DateTime.Now;
 
             WebBot webBot = new WebBot();
-            //baixaxar xml sisgeno
-            webBot.BaixarXMLSisgeno_InserirXMLnoPleres("https://sisgeno.aids.gov.br/", "http://pixeon02-app.pleres.net:9812/#/login", dataAtual);
+            var linkGenConectPleres = ConfigurationManager.AppSettings["LinkGenConect"];
+            var linkSisgeno =         ConfigurationManager.AppSettings["LinkSisgeno"];
+            webBot.BaixarXMLSisgeno_InserirXMLnoPleres(linkSisgeno, linkGenConectPleres, dataAtual);
 
             Console.ReadKey();
+            Environment.Exit(0);
         }
     }
 }
