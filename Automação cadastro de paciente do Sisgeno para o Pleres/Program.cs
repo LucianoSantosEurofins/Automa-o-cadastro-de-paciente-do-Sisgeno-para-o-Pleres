@@ -11,12 +11,11 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
         static void Main(string[] args)
         {
             var dataAtual = DateTime.Now;
+
             WebBot webBot = new WebBot();
+            //baixaxar xml sisgeno
+            webBot.BaixarXMLSisgeno_InserirXMLnoPleres("https://sisgeno.aids.gov.br/", "http://pixeon02-app.pleres.net:9812/#/login", dataAtual);
 
-            Console.WriteLine(dataAtual.ToString("dd/MM/yyyy"));
-            webBot.BaixarXMLSisgeno("https://sisgeno.aids.gov.br/", dataAtual);
-
-            webBot.InserirXMLNoGenConectPleres("genconect");
             Console.ReadKey();
         }
     }
