@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
+using System.Configuration;
 
 namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 {
@@ -21,6 +21,8 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             IWebElement txtCPF =         webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[2]/div[3]/div[2]/form/div[1]/input"));
             IWebElement txtSenha =       webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[2]/div[3]/div[2]/form/div[2]/input"));
             Thread.Sleep(2000);
+            var cpf =   ConfigurationManager.AppSettings["cpfSisgeno"];
+            var senha = ConfigurationManager.AppSettings["SenhaSisgeno"];
 
             txtCPF.SendKeys  ("73298097055");
             txtSenha.SendKeys("Senha");
@@ -35,6 +37,8 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             IWebElement txtSenha =       webDriver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div/div/div/section/div/form/div[2]/div/input"));
             IWebElement btnAcessar =     webDriver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div/div/div/section/div/form/div[3]/div/button"));
             Thread.Sleep(2000);
+            var email =   ConfigurationManager.AppSettings["EmailGenConect"];
+            var senha =   ConfigurationManager.AppSettings["SenhaGenConect"];
 
             txtEmail.SendKeys("luciano@teste.com");
             txtSenha.SendKeys("Senha");
