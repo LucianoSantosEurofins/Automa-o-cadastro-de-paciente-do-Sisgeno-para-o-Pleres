@@ -31,7 +31,6 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 
         public void InserirXMLNoGenConectPleres(string genConectLink, DateTime dataPaciente, WebDriver webDriver) 
         {
-            //WebDriver webDriver = new OpenQA.Selenium.Edge.EdgeDriver();
             webDriver.Navigate().GoToUrl(genConectLink);
             IWebElement txtEmail =       webDriver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div/div/div/section/div/form/div[1]/div/input"));
             IWebElement txtSenha =       webDriver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div/div/div/section/div/form/div[2]/div/input"));
