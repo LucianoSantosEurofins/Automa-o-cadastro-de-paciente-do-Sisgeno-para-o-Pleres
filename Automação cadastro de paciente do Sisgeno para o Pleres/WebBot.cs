@@ -46,7 +46,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             webDriver.Quit();
 
             var conversorXmlSisgenoParaXmlPleres = new ConversorXmlSisgenoParaXmlPleres();
-            conversorXmlSisgenoParaXmlPleres.ConverterXMLSisgeno_ParaXMLGenConect(new Modelos_XML.XMLsisgeno(), @"C:\Users\d9lb\OneDrive - Eurofins\Documentos\Relatorios SISGENO\exame_data_digit_solicitacao - Copia.xlsx");
+            conversorXmlSisgenoParaXmlPleres.ConverterXMLSisgeno_ParaXMLGenConect(new Modelos_XML.XMLsisgeno(), @"C:\Users\d9lb\OneDrive - Eurofins\Documentos\Relatorios SISGENO\exame_data_digit_solicitacao (5).xls");
         }
     }
 }
