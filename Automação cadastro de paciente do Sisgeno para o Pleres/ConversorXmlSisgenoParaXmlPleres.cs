@@ -18,57 +18,16 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
     {
         public Modelos_XML.XMLgenConectPleres ConverterXMLSisgeno_ParaXMLGenConect(Modelos_XML.XMLsisgeno xMLsisgeno, string caminhoRelatorioSisgeno)
         {
-            //ConvertXLStoXLSX(caminhoRelatorioSisgeno);
-            getPacientesFromHTMLFile(caminhoRelatorioSisgeno);
+            var pacientes = getPacientesFromHTMLFile(caminhoRelatorioSisgeno);
             return null;
         }
 
-        private void ConvertXLStoXLSX(string originalFilePath)
-        {
-            // Replace "input.xls" with the path to your XLS file
-
-
-            // Replace "output.xlsx" with the desired path for the XLSX output file
-            string inputFilePath = originalFilePath;
-
-            try
-            {
-                // Open the XLS file
-                using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(inputFilePath, false))
-                {
-                    // Get the workbook part
-                    WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
-
-                    // Get the first worksheet
-                    WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
-                    SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-
-                    // Iterate through each row
-                    foreach (var row in sheetData.Elements<Row>())
-                    {
-                        // Iterate through each cell in the row
-                        foreach (var cell in row.Elements<Cell>())
-                        {
-                            var value = cell.CellValue.Text;
-                            Console.Write(value + "\t");
-                        }
-                        Console.WriteLine();
-                    }
-                }
-
-                Console.WriteLine("Reading complete.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("An error occurred: " + ex.Message);
-            }
-        }
         private void changeFileExtension(string filePath)
         {
              File.Move(filePath, Path.ChangeExtension(filePath, ".txt"));
         }
         
-        public void getPacientesFromHTMLFile(string filePath)
+        public List<Paciente> getPacientesFromHTMLFile(string filePath)
         {
             changeFileExtension(filePath);
             var newFileExtensionPath = Path.ChangeExtension(filePath, ".txt");
@@ -129,6 +88,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                     pacientes.Add(paciente);
                 }
             }
+            return pacientes;
         }
     }
 }
