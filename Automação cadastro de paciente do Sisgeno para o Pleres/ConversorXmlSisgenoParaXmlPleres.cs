@@ -5,10 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres.Objetos;
-using ClosedXML.Excel;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
 using HtmlAgilityPack;
 
 
