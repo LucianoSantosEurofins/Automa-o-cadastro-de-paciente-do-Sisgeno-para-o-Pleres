@@ -31,7 +31,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 }
             }
             catch(FileNotFoundException ex)
-            {
+            {//
                 Console.WriteLine($"Não foi possivel converter arquivo: {filePath} , {ex}");
                 return null;
             }
