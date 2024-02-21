@@ -18,24 +18,39 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             return null;
         }
 
-        private void changeFileExtension(string filePath)
+        private List<string> changeFileExtensionAndGetFileContend(string filePath)
         {
-             File.Move(filePath, Path.ChangeExtension(filePath, ".txt"));
+            try
+            {
+                var newFileExtensionPath = Path.ChangeExtension(filePath, ".txt");
+                File.Move(filePath, newFileExtensionPath);
+                using (StreamReader stream = new StreamReader(newFileExtensionPath, Encoding.UTF8))
+                {
+                    var htmlContend = stream.ReadToEnd();
+                    return new List<string>() { htmlContend, newFileExtensionPath};
+                }
+            }
+            catch(FileNotFoundException ex)
+            {
+                Console.WriteLine($"Não foi possivel converter arquivo: {filePath} , {ex}");
+                return null;
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Não foi possivel Ler o arquivo: {filePath} , {ex}");
+                return null;
+            }
         }
         
         private List<Paciente> getPacientesFromHTMLFile(string filePath)
         {
-            try
-            {
-                changeFileExtension(filePath);
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine($"Não foi possivel converter arquivo: {filePath} {ex}");
-            }
-            
-            var newFileExtensionPath = Path.ChangeExtension(filePath, ".txt");
-            var htmlContend = File.ReadAllText(newFileExtensionPath);
+            var dadosDoArquivo = changeFileExtensionAndGetFileContend(filePath);
+
+            if (dadosDoArquivo == null)
+                return null;
+
+            var newFileExtensionPath = dadosDoArquivo[1];
+            var htmlContend = dadosDoArquivo[0];
             var pacientes = new List<Paciente>();
             HtmlDocument htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(htmlContend);
