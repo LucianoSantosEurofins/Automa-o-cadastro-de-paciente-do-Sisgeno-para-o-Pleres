@@ -35,7 +35,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             }
             catch (IOException ex)
             {
-                Console.WriteLine("Não foi possivel converter arquivo: " + filePath);
+                Console.WriteLine($"Não foi possivel converter arquivo: {filePath} {ex}");
             }
             
             var newFileExtensionPath = Path.ChangeExtension(filePath, ".txt");
@@ -49,8 +49,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 
             foreach (var row in rows)
             {
-                var dados = rows[rows.IndexOf(row)].SelectNodes("th|td");
-
+                var dados = row.SelectNodes("th|td");
                 if (dados != null)
                 {   
                     if (!dados[0].InnerText.Contains("#"))
