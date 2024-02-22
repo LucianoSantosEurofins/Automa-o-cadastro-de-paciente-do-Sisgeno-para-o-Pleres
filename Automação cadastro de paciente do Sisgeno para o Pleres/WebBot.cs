@@ -24,8 +24,15 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             var cpf =   ConfigurationManager.AppSettings["cpfSisgeno"];
             var senha = ConfigurationManager.AppSettings["SenhaSisgeno"];
 
-            txtCPF.SendKeys  (cpf);
-            txtSenha.SendKeys(senha);
+            try
+            {
+                txtCPF.SendKeys(cpf);
+                txtSenha.SendKeys(senha);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Não foi possível simular ações do usuário no Sisgeno {ex}");
+            }           
             InserirXMLNoGenConectPleres(genConectLink, dataPacientes, webDriver);
         }
 
@@ -39,12 +46,19 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             var email =   ConfigurationManager.AppSettings["EmailGenConect"];
             var senha =   ConfigurationManager.AppSettings["SenhaGenConect"];
 
-            txtEmail.SendKeys(email);
-            txtSenha.SendKeys(senha);
-
-            btnAcessar.Click();
-            webDriver.Quit();
-
+            try
+            {
+                txtEmail.SendKeys(email);
+                txtSenha.SendKeys(senha);
+                //outras ações devem ser inseridas aqui
+                btnAcessar.Click();
+                webDriver.Quit();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Não foi possível simular ações do usuário no genConnect {ex}");
+            }
+           
             var conversorXmlSisgenoParaXmlPleres = new ConversorXmlSisgenoParaXmlPleres();
             conversorXmlSisgenoParaXmlPleres.ConverterXMLSisgeno_ParaXMLGenConect(new Modelos_XML.XMLsisgeno(), @"C:\Users\d9lb\OneDrive - Eurofins\Documentos\Relatorios SISGENO\exame_data_digit_solicitacao.xls");
         }
