@@ -30,14 +30,13 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                     return new List<string>() { htmlContend, newFileExtensionPath};
                 }
             }
-            catch(FileNotFoundException ex)
-            {
-                Console.WriteLine($"Não foi possivel converter arquivo: {filePath} , {ex}");
-                return null;
-            }
             catch (IOException ex)
             {
-                Console.WriteLine($"Não foi possivel Ler o arquivo: {filePath} , {ex}");
+                Console.WriteLine($"{ex} {filePath}");
+                return null;
+            }
+            catch(Exception ex)
+            {
                 return null;
             }
         }
