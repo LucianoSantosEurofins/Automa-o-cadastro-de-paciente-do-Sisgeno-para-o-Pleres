@@ -28,6 +28,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             {
                 txtCPF.SendKeys(cpf);
                 txtSenha.SendKeys(senha);
+                //outras ações no site devem ser inseridas aqui
             }
             catch(Exception ex)
             {
