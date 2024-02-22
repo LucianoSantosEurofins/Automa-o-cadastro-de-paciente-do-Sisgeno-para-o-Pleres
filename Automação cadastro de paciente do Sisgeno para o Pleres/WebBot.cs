@@ -24,8 +24,8 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             var cpf =   ConfigurationManager.AppSettings["cpfSisgeno"];
             var senha = ConfigurationManager.AppSettings["SenhaSisgeno"];
 
-            txtCPF.SendKeys  ("73298097055");
-            txtSenha.SendKeys("Senha");
+            txtCPF.SendKeys  (cpf);
+            txtSenha.SendKeys(senha);
             InserirXMLNoGenConectPleres(genConectLink, dataPacientes, webDriver);
         }
 
@@ -39,8 +39,8 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             var email =   ConfigurationManager.AppSettings["EmailGenConect"];
             var senha =   ConfigurationManager.AppSettings["SenhaGenConect"];
 
-            txtEmail.SendKeys("luciano@teste.com");
-            txtSenha.SendKeys("Senha");
+            txtEmail.SendKeys(email);
+            txtSenha.SendKeys(senha);
 
             btnAcessar.Click();
             webDriver.Quit();
