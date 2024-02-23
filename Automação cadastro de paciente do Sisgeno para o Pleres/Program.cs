@@ -13,18 +13,14 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
         {
             var dataAtual = DateTime.Now;
             WebBot webBot = new WebBot();
+            GerenciadorDeArquivos gerenciadorDeArquivos = new GerenciadorDeArquivos();
             var linkGenConectPleres = ConfigurationManager.AppSettings["LinkGenConect"];
             var linkSisgeno =         ConfigurationManager.AppSettings["LinkSisgeno"];
-            CriarPastaArquivoBaixadoDoSisgeno();
+            var pastaRaiz = gerenciadorDeArquivos.CreateSisgenoFilesDir("RelatorioSisgeno");
             webBot.BaixarXMLSisgeno_InserirXMLnoPleres(linkSisgeno, linkGenConectPleres, dataAtual);
+            gerenciadorDeArquivos.MoverArquivoUsadoDoSisgeno(pastaRaiz, "");
             Console.ReadKey();
             Environment.Exit(0);
-        }
-
-        private static void CriarPastaArquivoBaixadoDoSisgeno()
-        {
-            var gerenciador = new GerenciadorDeArquivos();
-            gerenciador.CreateSisgenoFilesDir("RelatorioSisgeno");
         }
     }
 }

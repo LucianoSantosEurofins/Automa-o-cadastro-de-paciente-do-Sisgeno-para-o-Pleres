@@ -22,7 +22,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             }
             catch (IOException ex)
             {
-                Console.WriteLine($"Falha ao criar pasta... {ex}");
+                Console.WriteLine($"Falha ao criar pasta {ex}");
                 return null;
             }
             catch (Exception ex)

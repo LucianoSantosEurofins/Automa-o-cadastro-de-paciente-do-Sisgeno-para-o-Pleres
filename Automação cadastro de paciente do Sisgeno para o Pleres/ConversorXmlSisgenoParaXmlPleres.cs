@@ -15,7 +15,8 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
         public Modelos_XML.XMLgenConectPleres ConverterXMLSisgeno_ParaXMLGenConect(Modelos_XML.XMLsisgeno xMLsisgeno, string caminhoRelatorioSisgeno)
         {
             var pacientes = getPacientesFromHTMLFile(caminhoRelatorioSisgeno);
-            return null;
+            var xmlGenConect = new Modelos_XML.XMLgenConectPleres;
+            return xmlGenConect;
         }
 
         private List<string> changeFileExtensionAndGetFileContend(string filePath)
