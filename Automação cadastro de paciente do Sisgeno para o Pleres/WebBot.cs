@@ -10,7 +10,7 @@ using System.Configuration;
 namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 {
     public class WebBot
-    {
+    {//f
         public void BaixarXMLSisgeno_InserirXMLnoPleres(string sisgenoLink,string genConectLink, DateTime dataPacientes)
         {
             WebDriver webDriver = new OpenQA.Selenium.Edge.EdgeDriver();
