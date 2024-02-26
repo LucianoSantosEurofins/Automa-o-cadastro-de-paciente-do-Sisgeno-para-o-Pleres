@@ -10,8 +10,8 @@ using System.Configuration;
 namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 {
     public class WebBot
-    {//f
-        public void BaixarXMLSisgeno_InserirXMLnoPleres(string sisgenoLink,string genConectLink, DateTime dataPacientes)
+    {
+        public string BaixarXMLSisgeno_InserirXMLnoPleres(string sisgenoLink,string genConectLink, DateTime dataPacientes)
         {
             WebDriver webDriver = new OpenQA.Selenium.Edge.EdgeDriver();
             webDriver.Navigate().GoToUrl(sisgenoLink);
@@ -36,12 +36,15 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             }
 
             var conversor = new ConversorXmlSisgenoParaXmlPleres();
-            conversor.ConverterXMLSisgeno_ParaXMLGenConect(new Modelos_XML.XMLsisgeno(), "");
+            var caminhoArquivo = @"C:\Users\d9lb\OneDrive - Eurofins\Documentos\Relatorios SISGENO\exame_data_digit_solicitacao (5).xls"; 
+            var caminho = conversor.ConverterXMLSisgeno_ParaXMLGenConect(new Modelos_XML.XMLsisgeno(), caminhoArquivo).Item2;
 
-            InserirXMLNoGenConectPleres(genConectLink, dataPacientes, webDriver);
+            InserirXMLNoGenConectPleres(genConectLink, dataPacientes, webDriver, caminhoArquivo);
+
+            return caminho;
         }
 
-        public void InserirXMLNoGenConectPleres(string genConectLink, DateTime dataPaciente, WebDriver webDriver) 
+        public void InserirXMLNoGenConectPleres(string genConectLink, DateTime dataPaciente, WebDriver webDriver, string caminhoArquivo) 
         {
             webDriver.Navigate().GoToUrl(genConectLink);
             IWebElement txtEmail =       webDriver.FindElement(By.XPath("/html/body/div[1]/div[2]/div[2]/div/div/div/section/div/form/div[1]/div/input"));

@@ -12,11 +12,12 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 {
     public class ConversorXmlSisgenoParaXmlPleres
     {
-        public Modelos_XML.XMLgenConectPleres ConverterXMLSisgeno_ParaXMLGenConect(Modelos_XML.XMLsisgeno xMLsisgeno, string caminhoRelatorioSisgeno)
+        public (Modelos_XML.XMLgenConectPleres, string) ConverterXMLSisgeno_ParaXMLGenConect(Modelos_XML.XMLsisgeno xMLsisgeno, string caminhoRelatorioSisgeno)
         {
             var pacientes = getPacientesFromHTMLFile(caminhoRelatorioSisgeno);
+            var caminho = pacientes.Item2;
             var xmlGenConect = new Modelos_XML.XMLgenConectPleres();
-            return xmlGenConect;
+            return (xmlGenConect, caminho);
         }
 
         private List<string> changeFileExtensionAndGetFileContend(string filePath)
@@ -43,12 +44,12 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             }
         }
         
-        private List<Paciente> getPacientesFromHTMLFile(string filePath)
+        private (List<Paciente>, string) getPacientesFromHTMLFile(string filePath)
         {
             var dadosDoArquivo = changeFileExtensionAndGetFileContend(filePath);
 
             if (dadosDoArquivo == null)
-                return null;
+                return (null, null);
 
             var newFileExtensionPath = dadosDoArquivo[1];
             var htmlContend = dadosDoArquivo[0];
@@ -110,7 +111,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                     }
                 }                   
             }
-            return pacientes;
+            return (pacientes, newFileExtensionPath);
         }
     }
 }
