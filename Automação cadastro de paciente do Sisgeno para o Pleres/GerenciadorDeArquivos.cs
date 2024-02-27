@@ -33,10 +33,17 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             
         }
 
+        private string ChangeFileName(string originalFileName)
+        {
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFileName);
+            var renamedFile = $"{fileNameWithoutExtension}{DateTime.Now.ToString("dd-MM-yyyy_hh-mm")}.txt";
+            return renamedFile;
+        }
+
         public void MoverArquivoUsadoDoSisgeno(string pastaRaiz, string fileName)
         {
             string caminhoOrigem = System.IO.Path.Combine(pastaRaiz, fileName);
-            string caminhoDestino = System.IO.Path.Combine("", System.IO.Path.GetFileName(fileName));
+            string caminhoDestino = System.IO.Path.Combine(pastaRaiz, System.IO.Path.GetFileName(ChangeFileName(fileName)));
 
             try
             {
@@ -44,7 +51,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             }
             catch (IOException ex)
             {
-                
+                Console.WriteLine($"Erro ao mover arquivo: {ex}");
             }
         }
     }
