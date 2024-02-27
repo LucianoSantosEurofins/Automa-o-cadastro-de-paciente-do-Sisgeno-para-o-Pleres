@@ -13,7 +13,9 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
     {
         public string BaixarXMLSisgeno_InserirXMLnoPleres(string sisgenoLink,string genConectLink, DateTime dataPacientes)
         {
-            WebDriver webDriver = new OpenQA.Selenium.Edge.EdgeDriver();
+            var options = new OpenQA.Selenium.Edge.EdgeOptions();
+            options.AddUserProfilePreference("download.default_directory", @"");
+            WebDriver webDriver = new OpenQA.Selenium.Edge.EdgeDriver(options);
             webDriver.Navigate().GoToUrl(sisgenoLink);
 
             IWebElement btnLaboratorio = webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[1]/ul/li[2]/a"));

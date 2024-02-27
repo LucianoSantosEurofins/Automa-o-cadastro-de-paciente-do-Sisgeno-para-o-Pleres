@@ -42,16 +42,19 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 
         public void MoverArquivoUsadoDoSisgeno(string pastaRaiz, string fileName)
         {
-            string caminhoOrigem = System.IO.Path.Combine(pastaRaiz, fileName);
-            string caminhoDestino = System.IO.Path.Combine(pastaRaiz, System.IO.Path.GetFileName(ChangeFileName(fileName)));
-
             try
             {
+                string caminhoOrigem = System.IO.Path.Combine(pastaRaiz, fileName);
+                string caminhoDestino = System.IO.Path.Combine(pastaRaiz, System.IO.Path.GetFileName(ChangeFileName(fileName)));
                 File.Move(caminhoOrigem, caminhoDestino);
             }
             catch (IOException ex)
             {
                 Console.WriteLine($"Erro ao mover arquivo: {ex}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
     }
