@@ -30,9 +30,9 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             {
                 txtCPF.SendKeys(cpf);
                 txtSenha.SendKeys(senha);
-                //outras ações n
+                //outras ações devem ser inseridas aqui
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Não foi possível simular ações do usuário no Sisgeno {ex}");
             }
