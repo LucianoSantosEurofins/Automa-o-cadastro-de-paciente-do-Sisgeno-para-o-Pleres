@@ -41,7 +41,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 IWebElement dropDown = webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[2]/div/div/div/select/option[2]"));
                 dropDown.Click();
                 Thread.Sleep(1000);
-                webDriver.Navigate().GoToUrl("https://sisgeno.aids.gov.br/appRelatorio/frm_relatorio_situacao_exame.php");
+                webDriver.Navigate().GoToUrl(ConfigurationManager.AppSettings["linkRelatorioSisgeno"]);
                 
                 var txtInicio = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[2]/div[1]/input"));
                 var txtFim = webDriver.FindElement(By.Id("fim"));
