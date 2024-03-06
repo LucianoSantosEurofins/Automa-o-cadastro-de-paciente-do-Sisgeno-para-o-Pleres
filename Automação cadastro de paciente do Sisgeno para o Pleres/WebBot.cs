@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using OpenQA.Selenium;
 using System.Configuration;
 using System.IO;
+using HtmlAgilityPack;
 
 namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 {
@@ -55,7 +56,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 Thread.Sleep(6000);
                 var conversor = new ConversorXmlSisgenoParaXmlPleres();
                 var caminhoArquivo = getTempFileAndChangeExtension(downLoadPath);
-                var caminho = conversor.ConverterXMLSisgeno_ParaXMLGenConect(caminhoArquivo).Item2;
+                var caminho = conversor.ConverterXMLSisgeno_ParaXMLGenConect(caminhoArquivo, webDriver).Item2;
                 InserirXMLNoGenConectPleres(genConectLink, dataPacientes, webDriver, caminhoArquivo);
                 return caminho;
             }
@@ -66,14 +67,26 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             }          
         }
 
-        public List<Objetos.Paciente> getPacientesCpf(List<Objetos.Paciente> pacientes)
+        public List<Objetos.Paciente> getPacientesCpf(List<Objetos.Paciente> pacientes, WebDriver webDriver)
         {
             try
             {
-                var options = new OpenQA.Selenium.Edge.EdgeOptions();
-                var webDriver = new OpenQA.Selenium.Edge.EdgeDriver(options);
                 webDriver.Navigate().GoToUrl(ConfigurationManager.AppSettings["linkHistoricoSisgeno"]);
-                var htmlContend = webDriver.PageSource;
+
+                foreach(var paciente in pacientes)
+                {
+                    IWebElement txtNome = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[1]/input"));
+                    IWebElement btnBuscar = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[3]/input"));
+
+                    txtNome.Clear();
+                    txtNome.SendKeys(paciente.NomeDoPaciente.Trim());
+                    btnBuscar.Click();
+                    
+                    Thread.Sleep(6000);
+                    var htmlContend = webDriver.PageSource;
+                    FiltrarPacienteNaPagina(paciente, htmlContend);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -82,7 +95,30 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 
             return null;
         }
+        private List<string[]> FiltrarPacienteNaPagina(Objetos.Paciente Paciente, string htmlContend)
+        {
+            try
+            {
+                HtmlDocument htmlDocument = new HtmlDocument();
+                htmlDocument.LoadHtml(htmlContend);
+                var table = htmlDocument.DocumentNode.SelectNodes("//table");
+                var rows = table.FirstOrDefault().SelectNodes("tbody").FirstOrDefault().SelectNodes("tr");
 
+                foreach (var row in rows)
+                {
+                    var columns = row.SelectNodes("td");
+                    var nome =                     columns[0].InnerText;
+                    var dataNascimento =           columns[1].InnerText;
+                    var btnPesquisar =             columns[10].InnerHtml;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return null;
+        }
         public string getTempFileAndChangeExtension(string pastaRaiz)
         {           
             try

@@ -6,18 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres.Objetos;
 using HtmlAgilityPack;
-
+using OpenQA.Selenium;
+using OpenQA.Selenium.Edge;
 
 namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 {
     public class ConversorXmlSisgenoParaXmlPleres
     {
-        public (Modelos_XML.XMLgenConectPleres, string) ConverterXMLSisgeno_ParaXMLGenConect(string caminhoRelatorioSisgeno)
+        public (Modelos_XML.XMLgenConectPleres, string) ConverterXMLSisgeno_ParaXMLGenConect(string caminhoRelatorioSisgeno, WebDriver webDriver)
         {
             var pacientes = getPacientesFromHTMLFile(caminhoRelatorioSisgeno);
             var caminho = pacientes.Item2;
             var webBot = new WebBot();
-            var pacientesComCpf = webBot.getPacientesCpf(pacientes.Item1);
+            var pacientesComCpf = webBot.getPacientesCpf(pacientes.Item1, webDriver);
             var xmlGenConect = new Modelos_XML.XMLgenConectPleres();
             
             return (xmlGenConect, caminho);
