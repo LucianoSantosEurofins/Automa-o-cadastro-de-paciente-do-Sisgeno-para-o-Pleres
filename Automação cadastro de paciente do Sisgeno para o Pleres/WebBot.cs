@@ -26,7 +26,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             btnLaboratorio.Click();
             IWebElement txtCPF =         webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[2]/div[3]/div[2]/form/div[1]/input"));
             IWebElement txtSenha =       webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[2]/div[3]/div[2]/form/div[2]/input"));
-            IWebElement btnEntrar =       webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[2]/div[3]/div[2]/form/div[4]/div/div/input"));
+            IWebElement btnEntrar =      webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[2]/div[3]/div[2]/form/div[4]/div/div/input"));
             
             Thread.Sleep(2000);
             var cpf =   ConfigurationManager.AppSettings["cpfSisgeno"];
@@ -72,10 +72,12 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             {
                 var options = new OpenQA.Selenium.Edge.EdgeOptions();
                 var webDriver = new OpenQA.Selenium.Edge.EdgeDriver(options);
+                webDriver.Navigate().GoToUrl(ConfigurationManager.AppSettings["linkHistoricoSisgeno"]);
+                var htmlContend = webDriver.PageSource;
             }
-            catch
+            catch (Exception ex)
             {
-
+                Console.WriteLine($"erro ao buscar CPF {ex}");
             }
 
             return null;
