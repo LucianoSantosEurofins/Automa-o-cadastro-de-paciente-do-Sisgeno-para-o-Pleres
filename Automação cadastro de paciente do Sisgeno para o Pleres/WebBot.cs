@@ -55,7 +55,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 Thread.Sleep(6000);
                 var conversor = new ConversorXmlSisgenoParaXmlPleres();
                 var caminhoArquivo = getTempFileAndChangeExtension(downLoadPath);
-                var caminho = conversor.ConverterXMLSisgeno_ParaXMLGenConect(new Modelos_XML.XMLsisgeno(), caminhoArquivo).Item2;
+                var caminho = conversor.ConverterXMLSisgeno_ParaXMLGenConect(caminhoArquivo).Item2;
                 InserirXMLNoGenConectPleres(genConectLink, dataPacientes, webDriver, caminhoArquivo);
                 return caminho;
             }
