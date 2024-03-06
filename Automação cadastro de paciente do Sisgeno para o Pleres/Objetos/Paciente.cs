@@ -45,6 +45,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres.Objetos
         public string MotivoAmostraRejeitadaGP41 { get; set; }
         public string MotivoAmostraRejeitadaMaraviroque { get; set; }
         public string SolicitacaoSimultaneaDosExamesDeCargaViralGenotipagem { get; set; }
+        public string cpfPaciente { get; set; }
     }
 
 }

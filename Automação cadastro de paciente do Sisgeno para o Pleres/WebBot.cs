@@ -66,6 +66,21 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             }          
         }
 
+        public List<Objetos.Paciente> getPacientesCpf(List<Objetos.Paciente> pacientes)
+        {
+            try
+            {
+                var options = new OpenQA.Selenium.Edge.EdgeOptions();
+                var webDriver = new OpenQA.Selenium.Edge.EdgeDriver(options);
+            }
+            catch
+            {
+
+            }
+
+            return null;
+        }
+
         public string getTempFileAndChangeExtension(string pastaRaiz)
         {           
             try
