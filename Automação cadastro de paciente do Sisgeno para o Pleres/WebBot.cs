@@ -102,14 +102,19 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 HtmlDocument htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(htmlContend);
                 var table = htmlDocument.DocumentNode.SelectNodes("//table");
-                var rows = table.FirstOrDefault().SelectNodes("tbody").FirstOrDefault().SelectNodes("tr");
-
+                var rows = table.FirstOrDefault().SelectNodes("tbody").FirstOrDefault().SelectNodes("tr").Where(tr => tr.InnerText.Contains(Paciente.DataDeNascimento));
+                var informacoeLink = "https://sisgeno.aids.gov.br/appConsultas/historicoPaciente.php?cd_pac=@PACIENTEID%20&login=";
+                var xPathCpf = "/html/body/div[1]/div[3]/div[1]/h6";
                 foreach (var row in rows)
                 {
                     var columns = row.SelectNodes("td");
                     var nome =                     columns[0].InnerText;
                     var dataNascimento =           columns[1].InnerText;
                     var btnPesquisar =             columns[10].InnerHtml;
+                    HtmlDocument htmlDocument2 = new HtmlDocument();
+                    htmlDocument2.LoadHtml(btnPesquisar);
+                    var idPaciente = htmlDocument2.DocumentNode.SelectNodes("a").FirstOrDefault().Attributes["data-cd-pac"].Value;
+                    var link = informacoeLink.Replace("@PACIENTEID", idPaciente);
                 }
             }
             catch (Exception ex)
