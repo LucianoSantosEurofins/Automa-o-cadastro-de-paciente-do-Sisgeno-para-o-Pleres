@@ -95,34 +95,32 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 
             return null;
         }
-        private List<string[]> FiltrarPacienteNaPagina(Objetos.Paciente Paciente, string htmlContend)
+        private List<string> FiltrarPacienteNaPagina(Objetos.Paciente Paciente, string htmlContend)
         {
             try
             {
                 HtmlDocument htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(htmlContend);
                 var table = htmlDocument.DocumentNode.SelectNodes("//table");
-                var rows = table.FirstOrDefault().SelectNodes("tbody").FirstOrDefault().SelectNodes("tr").Where(tr => tr.InnerText.Contains(Paciente.DataDeNascimento));
-                var informacoeLink = "https://sisgeno.aids.gov.br/appConsultas/historicoPaciente.php?cd_pac=@PACIENTEID%20&login=";
-                var xPathCpf = "/html/body/div[1]/div[3]/div[1]/h6";
-                foreach (var row in rows)
-                {
-                    var columns = row.SelectNodes("td");
-                    var nome =                     columns[0].InnerText;
-                    var dataNascimento =           columns[1].InnerText;
-                    var btnPesquisar =             columns[10].InnerHtml;
-                    HtmlDocument htmlDocument2 = new HtmlDocument();
-                    htmlDocument2.LoadHtml(btnPesquisar);
-                    var idPaciente = htmlDocument2.DocumentNode.SelectNodes("a").FirstOrDefault().Attributes["data-cd-pac"].Value;
-                    var link = informacoeLink.Replace("@PACIENTEID", idPaciente);
-                }
+                var rows = table.FirstOrDefault().SelectNodes("tbody").FirstOrDefault().SelectNodes("tr").FirstOrDefault(tr => tr.InnerText.Contains(Paciente.DataDeNascimento));
+                var informacoeLinkSemParametro = "https://sisgeno.aids.gov.br/appConsultas/historicoPaciente.php?cd_pac=@PACIENTEID%20&login=";
+                //var xPathCpf = "/html/body/div[1]/div[3]/div[1]/h6";
+
+                var columns = rows.SelectNodes("td");
+                var nome =                     columns[0].InnerText;
+                var dataNascimento =           columns[1].InnerText;
+                var btnPesquisar =             columns[10].InnerHtml;
+                HtmlDocument htmlDocument2 = new HtmlDocument();
+                htmlDocument2.LoadHtml(btnPesquisar);
+                var idPaciente = htmlDocument2.DocumentNode.SelectNodes("a").FirstOrDefault().Attributes["data-cd-pac"].Value;
+                var linkComParametro = informacoeLinkSemParametro.Replace("@PACIENTEID", idPaciente);
+                return new List<string> { Paciente.NomeDoPaciente, linkComParametro };
             }
             catch (Exception ex)
             {
-
-            }
-
-            return null;
+                Console.WriteLine($"Não foi possivel obter dados do paciente: {Paciente.NomeDoPaciente},  {ex}");
+                return null;
+            } 
         }
         public string getTempFileAndChangeExtension(string pastaRaiz)
         {           
