@@ -48,7 +48,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 var txtFim = webDriver.FindElement(By.Id("fim"));
 
                 txtFim.SendKeys(DateTime.Now.ToString("dd/MM/yyyy"));
-                txtInicio.SendKeys(DateTime.Now.AddDays(-10).ToString("dd/MM/yyyy"));
+                txtInicio.SendKeys(DateTime.Now.AddDays(-2).ToString("dd/MM/yyyy"));
 
                 webDriver.FindElement(By.XPath("/html/body/fieldset/legend/h4/strong")).Click();
                 IWebElement btnEnviar = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[5]/div/input"));
@@ -82,11 +82,11 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                     txtNome.SendKeys(paciente.NomeDoPaciente.Trim());
                     btnBuscar.Click();
                     
-                    Thread.Sleep(6000);
+                    Thread.Sleep(35000);
                     var htmlContend = webDriver.PageSource;
-                    FiltrarPacienteNaPagina(paciente, htmlContend);
-                }
-                
+                    var result = FiltrarPacienteNaPagina(paciente, htmlContend);
+                    paciente.cpfPaciente = result != null ? result[1] : "";
+                }           
             }
             catch (Exception ex)
             {
@@ -102,7 +102,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 HtmlDocument htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(htmlContend);
                 var table = htmlDocument.DocumentNode.SelectNodes("//table");
-                var rows = table.FirstOrDefault().SelectNodes("tbody").FirstOrDefault().SelectNodes("tr").FirstOrDefault(tr => tr.InnerText.Contains(Paciente.DataDeNascimento));
+                var rows = table.FirstOrDefault().SelectNodes("tbody").FirstOrDefault().SelectNodes("tr").FirstOrDefault(tr => tr.InnerText.Contains(Paciente.DataDeNascimento.Trim()));
                 var informacoeLinkSemParametro = "https://sisgeno.aids.gov.br/appConsultas/historicoPaciente.php?cd_pac=@PACIENTEID%20&login=";
                 //var xPathCpf = "/html/body/div[1]/div[3]/div[1]/h6";
 
