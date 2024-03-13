@@ -8,6 +8,7 @@ using OpenQA.Selenium;
 using System.Configuration;
 using System.IO;
 using HtmlAgilityPack;
+using System.Text.RegularExpressions;
 
 namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 {
@@ -48,7 +49,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 var txtFim = webDriver.FindElement(By.Id("fim"));
 
                 txtFim.SendKeys(DateTime.Now.ToString("dd/MM/yyyy"));
-                txtInicio.SendKeys(DateTime.Now.AddDays(-2).ToString("dd/MM/yyyy"));
+                txtInicio.SendKeys(DateTime.Now.AddDays(-5).ToString("dd/MM/yyyy"));
 
                 webDriver.FindElement(By.XPath("/html/body/fieldset/legend/h4/strong")).Click();
                 IWebElement btnEnviar = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[5]/div/input"));
@@ -85,7 +86,15 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                     Thread.Sleep(35000);
                     var htmlContend = webDriver.PageSource;
                     var result = FiltrarPacienteNaPagina(paciente, htmlContend);
-                    paciente.cpfPaciente = result != null ? result[1] : "";
+
+                    //((IJavaScriptExecutor)webDriver).ExecuteScript("window.open();");
+                    webDriver.SwitchTo().NewWindow(WindowType.Tab);
+                    webDriver.Navigate().GoToUrl(result[1]);
+                    Thread.Sleep(500);
+                    var cpf = filtrarCpfDoTexto(webDriver.PageSource);
+                    webDriver.Close();
+                    webDriver.SwitchTo().Window(webDriver.WindowHandles.First());
+                    paciente.cpfPaciente = cpf;
                 }           
             }
             catch (Exception ex)
@@ -95,6 +104,30 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 
             return null;
         }
+
+        private string filtrarCpfDoTexto(string texto)
+        {
+            Regex regex = new Regex(@"([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})");
+
+            // Encontrar correspondências
+            MatchCollection matches = regex.Matches(texto);
+
+            // Verificar se há correspondências
+            if (matches.Count > 0)
+            {              
+                foreach (Match match in matches)
+                {
+                    return match.Value;
+                }
+            }
+            else
+            {
+                return "";
+            }
+
+            return "";
+        }
+
         private List<string> FiltrarPacienteNaPagina(Objetos.Paciente Paciente, string htmlContend)
         {
             try
