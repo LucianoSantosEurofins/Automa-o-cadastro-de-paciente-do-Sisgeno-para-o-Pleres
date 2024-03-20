@@ -49,7 +49,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 var txtFim = webDriver.FindElement(By.Id("fim"));
 
                 txtFim.SendKeys(DateTime.Now.ToString("dd/MM/yyyy"));
-                txtInicio.SendKeys(DateTime.Now.AddDays(-5).ToString("dd/MM/yyyy"));
+                txtInicio.SendKeys(DateTime.Now.AddDays(-1).ToString("dd/MM/yyyy"));
 
                 webDriver.FindElement(By.XPath("/html/body/fieldset/legend/h4/strong")).Click();
                 IWebElement btnEnviar = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[5]/div/input"));
@@ -76,33 +76,41 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 
                 foreach(var paciente in pacientes)
                 {
-                    IWebElement txtNome = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[1]/input"));
-                    IWebElement btnBuscar = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[3]/input"));
+                    try
+                    {
+                        IWebElement txtNome = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[1]/input"));
+                        IWebElement btnBuscar = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[3]/input"));
 
-                    txtNome.Clear();
-                    txtNome.SendKeys(paciente.NomeDoPaciente.Trim());
-                    btnBuscar.Click();
+                        txtNome.Clear();
+                        txtNome.SendKeys(paciente.NomeDoPaciente.Trim());
+                        btnBuscar.Click();
+
+                        Thread.Sleep(35000);
+                        var htmlContend = webDriver.PageSource;
+                        var result = FiltrarPacienteNaPagina(paciente, htmlContend);
+
+                        //((IJavaScriptExecutor)webDriver).ExecuteScript("window.open();");
+                        webDriver.SwitchTo().NewWindow(WindowType.Tab);
+                        webDriver.Navigate().GoToUrl(result[1]);
+                        Thread.Sleep(500);
+                        var cpf = filtrarCpfDoTexto(webDriver.PageSource);
+                        webDriver.Close();
+                        webDriver.SwitchTo().Window(webDriver.WindowHandles.First());
+                        paciente.cpfPaciente = cpf;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"erro ao capturar cpf do paciente {paciente.NomeDoPaciente} {ex}");
+                    }
                     
-                    Thread.Sleep(35000);
-                    var htmlContend = webDriver.PageSource;
-                    var result = FiltrarPacienteNaPagina(paciente, htmlContend);
-
-                    //((IJavaScriptExecutor)webDriver).ExecuteScript("window.open();");
-                    webDriver.SwitchTo().NewWindow(WindowType.Tab);
-                    webDriver.Navigate().GoToUrl(result[1]);
-                    Thread.Sleep(500);
-                    var cpf = filtrarCpfDoTexto(webDriver.PageSource);
-                    webDriver.Close();
-                    webDriver.SwitchTo().Window(webDriver.WindowHandles.First());
-                    paciente.cpfPaciente = cpf;
                 }           
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"erro ao buscar CPF {ex}");
+                Console.WriteLine($"erro {ex}");
             }
 
-            return null;
+            return pacientes;
         }
 
         private string filtrarCpfDoTexto(string texto)
