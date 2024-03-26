@@ -9,6 +9,7 @@ using System.Configuration;
 using System.IO;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
+using OpenQA.Selenium.Interactions;
 
 namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 {
@@ -19,17 +20,16 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             var options = new OpenQA.Selenium.Edge.EdgeOptions();
             var downLoadPath = @"C:\Users\d9lb\OneDrive - Eurofins\Área de Trabalho\TesteArquivosSisgeno";
             options.AddUserProfilePreference("download.default_directory", downLoadPath);
-            options.AddUserProfilePreference("download.prompt_for_download", false);
-            
+            options.AddUserProfilePreference("download.prompt_for_download", false);           
             WebDriver webDriver = new OpenQA.Selenium.Edge.EdgeDriver(options);
             webDriver.Navigate().GoToUrl(sisgenoLink);
-
+            Actions action = new Actions(webDriver);
+            action.SendKeys(OpenQA.Selenium.Keys.Escape).Perform();
             IWebElement btnLaboratorio = webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[1]/ul/li[2]/a"));
             btnLaboratorio.Click();
             IWebElement txtCPF =         webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[2]/div[3]/div[2]/form/div[1]/input"));
             IWebElement txtSenha =       webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[2]/div[3]/div[2]/form/div[2]/input"));
-            IWebElement btnEntrar =      webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[2]/div[3]/div[2]/form/div[4]/div/div/input"));
-            
+            IWebElement btnEntrar =      webDriver.FindElement(By.XPath("/html/body/div[2]/div/div/div/div[2]/div[3]/div[2]/form/div[4]/div/div/input"));          
             Thread.Sleep(2000);
             var cpf =   ConfigurationManager.AppSettings["cpfSisgeno"];
             var senha = ConfigurationManager.AppSettings["SenhaSisgeno"];
@@ -65,9 +65,28 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             {
                 Console.WriteLine($"Não foi possível simular ações do usuário no Sisgeno {ex}");
                 return null;
-            }          
+            }            
         }
+        public void getDadosDaSolicitacao(WebDriver webDriver, List<Objetos.Paciente> pacientes)
+        {
+            webDriver.Navigate().GoToUrl("https://sisgeno.aids.gov.br/principal.php");
+            var txtPaciente = webDriver.FindElement(By.Id("nome_pac"));
+            pacientes.Add(new Objetos.Paciente());
+            foreach (var paciente in pacientes)
+            {
+                txtPaciente.SendKeys("ANTôNIO AUGUSTO RIBEIRO SILVA");
+                try
+                {
+                    var divTabelaResultado = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/div[2]/div[2]"));
+                }
+                catch
+                {
 
+                }
+                txtPaciente.Clear();
+            }
+
+        }
         public List<Objetos.Paciente> getPacientesCpf(List<Objetos.Paciente> pacientes, WebDriver webDriver)
         {
             try
@@ -112,7 +131,6 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 
             return pacientes;
         }
-
         private string filtrarCpfDoTexto(string texto)
         {
             Regex regex = new Regex(@"([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})");
@@ -135,7 +153,6 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 
             return "";
         }
-
         private List<string> FiltrarPacienteNaPagina(Objetos.Paciente Paciente, string htmlContend)
         {
             try
@@ -145,7 +162,6 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 var table = htmlDocument.DocumentNode.SelectNodes("//table");
                 var rows = table.FirstOrDefault().SelectNodes("tbody").FirstOrDefault().SelectNodes("tr").FirstOrDefault(tr => tr.InnerText.Contains(Paciente.DataDeNascimento.Trim()));
                 var informacoeLinkSemParametro = "https://sisgeno.aids.gov.br/appConsultas/historicoPaciente.php?cd_pac=@PACIENTEID%20&login=";
-                //var xPathCpf = "/html/body/div[1]/div[3]/div[1]/h6";
 
                 var columns = rows.SelectNodes("td");
                 var nome =                     columns[0].InnerText;
@@ -180,7 +196,6 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 return null;
             }
         }
-
         public void InserirXMLNoGenConectPleres(string genConectLink, DateTime dataPaciente, WebDriver webDriver, string caminhoArquivo) 
         {
             webDriver.Navigate().GoToUrl(genConectLink);
