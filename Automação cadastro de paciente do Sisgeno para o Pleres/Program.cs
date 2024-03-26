@@ -11,7 +11,6 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
     {
         static void Main(string[] args)
         {
-            //teste commit
             var dataAtual = DateTime.Now;
             WebBot webBot = new WebBot();
             GerenciadorDeArquivos gerenciadorDeArquivos = new GerenciadorDeArquivos();
