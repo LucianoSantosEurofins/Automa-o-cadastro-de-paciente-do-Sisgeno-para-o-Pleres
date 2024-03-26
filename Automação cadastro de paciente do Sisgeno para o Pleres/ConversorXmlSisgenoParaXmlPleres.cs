@@ -19,6 +19,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             var caminho = pacientes.Item2;
             var webBot = new WebBot();
             var pacientesComCpf = webBot.getPacientesCpf(pacientes.Item1, webDriver);
+            webBot.getDadosDaSolicitacao(webDriver, pacientesComCpf);
             var xmlGenConect = new Modelos_XML.XMLgenConectPleres();
             
             return (xmlGenConect, caminho);

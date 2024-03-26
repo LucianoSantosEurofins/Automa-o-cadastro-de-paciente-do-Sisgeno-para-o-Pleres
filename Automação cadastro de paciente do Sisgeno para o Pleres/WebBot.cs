@@ -49,7 +49,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 var txtFim = webDriver.FindElement(By.Id("fim"));
 
                 txtFim.SendKeys(DateTime.Now.ToString("dd/MM/yyyy"));
-                txtInicio.SendKeys(DateTime.Now.AddDays(-1).ToString("dd/MM/yyyy"));
+                txtInicio.SendKeys(DateTime.Now.AddDays(-3).ToString("dd/MM/yyyy"));
 
                 webDriver.FindElement(By.XPath("/html/body/fieldset/legend/h4/strong")).Click();
                 IWebElement btnEnviar = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[5]/div/input"));
@@ -69,14 +69,16 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
         }
         public void getDadosDaSolicitacao(WebDriver webDriver, List<Objetos.Paciente> pacientes)
         {
-            webDriver.Navigate().GoToUrl("https://sisgeno.aids.gov.br/principal.php");
+            webDriver.Navigate().GoToUrl("https://sisgeno.aids.gov.br/appSolicitacao/frmNewConsultaPaciente.php");
             var txtPaciente = webDriver.FindElement(By.Id("nome_pac"));
-            pacientes.Add(new Objetos.Paciente());
+
             foreach (var paciente in pacientes)
             {
-                txtPaciente.SendKeys("ANTôNIO AUGUSTO RIBEIRO SILVA");
+                txtPaciente.SendKeys(paciente.NomeDoPaciente);
                 try
                 {
+                    var btnPesquisar = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[4]/button"));
+                    btnPesquisar.Click();
                     var divTabelaResultado = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/div[2]/div[2]"));
                 }
                 catch

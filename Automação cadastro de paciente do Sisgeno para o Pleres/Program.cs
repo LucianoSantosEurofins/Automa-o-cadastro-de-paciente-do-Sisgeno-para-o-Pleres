@@ -18,7 +18,6 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             var linkSisgeno =         ConfigurationManager.AppSettings["LinkSisgeno"];
             var pastaRaiz = gerenciadorDeArquivos.CreateSisgenoFilesDir("RelatorioSisgeno");
             var arquivoXlsSisgeno = webBot.BaixarXMLSisgeno_InserirXMLnoPleres(linkSisgeno, linkGenConectPleres, dataAtual);
-            webBot.getDadosDaSolicitacao(webDriver, new List<Objetos.Paciente>());
             gerenciadorDeArquivos.MoverArquivoUsadoDoSisgeno(pastaRaiz, arquivoXlsSisgeno);
             Console.ReadKey();
             Environment.Exit(0);
