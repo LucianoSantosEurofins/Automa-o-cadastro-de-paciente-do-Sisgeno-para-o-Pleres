@@ -49,7 +49,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 var txtFim = webDriver.FindElement(By.Id("fim"));
 
                 txtFim.SendKeys(DateTime.Now.ToString("dd/MM/yyyy"));
-                txtInicio.SendKeys(DateTime.Now.AddDays(-3).ToString("dd/MM/yyyy"));
+                txtInicio.SendKeys(DateTime.Now.AddDays(-15).ToString("dd/MM/yyyy"));
 
                 webDriver.FindElement(By.XPath("/html/body/fieldset/legend/h4/strong")).Click();
                 IWebElement btnEnviar = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[5]/div/input"));
@@ -114,10 +114,13 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                         webDriver.SwitchTo().NewWindow(WindowType.Tab);
                         webDriver.Navigate().GoToUrl(result[1]);
                         Thread.Sleep(500);
-                        var cpf = filtrarCpfDoTexto(webDriver.PageSource);
+                        var pageContend = webDriver.PageSource;
+                        var crm = getCrmMedico(pageContend, paciente);               
+                        var cpf = filtrarCpfDoTexto(pageContend);
                         webDriver.Close();
                         webDriver.SwitchTo().Window(webDriver.WindowHandles.First());
                         paciente.cpfPaciente = cpf;
+                        paciente.crmMedico = crm;
                     }
                     catch (Exception ex)
                     {
@@ -130,9 +133,27 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             {
                 Console.WriteLine($"erro {ex}");
             }
-
+            var pacienteNulls = pacientes.Where(p => string.IsNullOrEmpty(p.crmMedico));
             return pacientes;
         }
+
+        private string getCrmMedico(string htmlContend, Objetos.Paciente paciente)   
+        {
+            try
+            {
+                HtmlDocument htmlDocument = new HtmlDocument();
+                htmlDocument.LoadHtml(htmlContend);
+                var tdsIdentificador = htmlDocument.DocumentNode.SelectNodes("//td").FirstOrDefault(td => td.InnerText.Contains(paciente.IdentificadorDaAmostra.Trim()));
+                var dados = tdsIdentificador.ParentNode.SelectNodes("//td");
+                return dados[5].InnerText;
+            }
+            catch
+            {
+                return null;
+            }
+
+        }
+
         private string filtrarCpfDoTexto(string texto)
         {
             Regex regex = new Regex(@"([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})");
