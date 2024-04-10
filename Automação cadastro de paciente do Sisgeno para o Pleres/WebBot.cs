@@ -110,7 +110,6 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                         var htmlContend = webDriver.PageSource;
                         var result = FiltrarPacienteNaPagina(paciente, htmlContend);
 
-                        //((IJavaScriptExecutor)webDriver).ExecuteScript("window.open();");
                         webDriver.SwitchTo().NewWindow(WindowType.Tab);
                         webDriver.Navigate().GoToUrl(result[1]);
                         Thread.Sleep(500);
