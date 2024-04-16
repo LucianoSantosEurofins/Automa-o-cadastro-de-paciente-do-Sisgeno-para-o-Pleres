@@ -175,7 +175,7 @@
     <Compile Include="Modelos XML\XMLgenConectPleres.cs" />
     <Compile Include="Modelos XML\XMLsisgeno.cs" />
     <Compile Include="Objetos\Paciente.cs" />
-    <Compile Include="Objetos\TemplatePardini.cs" />
+    <Compile Include="Modelos XML\TemplatePardini.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebBot.cs" />
