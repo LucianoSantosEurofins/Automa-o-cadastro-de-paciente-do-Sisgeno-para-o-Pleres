@@ -15,7 +15,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 {
     public class WebBot
     {
-        public string BaixarXMLSisgeno_InserirXMLnoPleres(string sisgenoLink,string genConectLink, DateTime dataPacientes)
+        public string BaixarXMLSisgeno_InserirXMLnoPleres(string sisgenoLink,string genConectLink, DateTime dataPacientes) 
         {
             var options = new OpenQA.Selenium.Edge.EdgeOptions();
             var downLoadPath = @"C:\Users\d9lb\OneDrive - Eurofins\Área de Trabalho\TesteArquivosSisgeno";
@@ -49,7 +49,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
                 var txtFim = webDriver.FindElement(By.Id("fim"));
 
                 txtFim.SendKeys(DateTime.Now.ToString("dd/MM/yyyy"));
-                txtInicio.SendKeys(DateTime.Now.AddDays(-15).ToString("dd/MM/yyyy"));
+                txtInicio.SendKeys(DateTime.Now.AddDays(-5).ToString("dd/MM/yyyy"));
 
                 webDriver.FindElement(By.XPath("/html/body/fieldset/legend/h4/strong")).Click();
                 IWebElement btnEnviar = webDriver.FindElement(By.XPath("/html/body/fieldset/div/div/form/div[5]/div/input"));
@@ -148,7 +148,7 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             }
             catch
             {
-                return null;
+                return "";
             }
 
         }

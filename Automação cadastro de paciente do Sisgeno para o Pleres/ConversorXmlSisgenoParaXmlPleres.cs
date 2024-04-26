@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres.Objetos;
 using HtmlAgilityPack;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
+using PdfParaXml.TemplateXML;
 
 namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
 {
@@ -19,9 +21,69 @@ namespace Automação_cadastro_de_paciente_do_Sisgeno_para_o_Pleres
             var caminho = pacientes.Item2;
             var webBot = new WebBot();
             var pacientesComCpf = webBot.getPacientesCpf(pacientes.Item1, webDriver);
+            getPleresXML(pacientesComCpf);
             var xmlGenConect = new Modelos_XML.XMLgenConectPleres();
             
             return (xmlGenConect, caminho);
+        }
+
+        private TemplatePardini.Registro getPleresXML(List<Paciente> pacientes)
+        {
+            try
+            {
+                var templatePardini = new TemplatePardini();
+                TemplatePardini.Registro registro = new TemplatePardini.Registro();
+                TemplatePardini.Lote lote = new TemplatePardini.Lote();
+                var pedidos = new List<TemplatePardini.Pedido>();
+                //TemplatePardini.Paciente paciente = new TemplatePardini.Paciente();
+                TemplatePardini.Exame exame = new TemplatePardini.Exame();
+
+                registro.Protocolo = 1;
+                registro.ID = Guid.NewGuid().ToString();
+                lote.CodLab = string.Empty;
+                lote.DataLote = DateTime.Now;
+                lote.HoraLote = DateTime.Now.ToString("HH:mm:ss");
+
+                foreach (var paciente1 in pacientes)
+                {
+                    var pedido = new TemplatePardini.Pedido();
+                    var paciente = new TemplatePardini.Paciente();
+                    pedido.CodPedLab = "Teste";
+                    paciente.Nome = paciente1.NomeDoPaciente;
+                    paciente.CodPacLab = paciente1.IdentificadorDaAmostra;
+                    paciente.DataNasc = string.IsNullOrEmpty(paciente1.DataDeNascimento) ? DateTime.Now : Convert.ToDateTime(paciente.DataNasc);
+                    pedido.Paciente = paciente;
+
+                    pedidos.Add(pedido);
+                }
+                lote.Pedidos = pedidos;
+                registro.Lote = lote;
+
+
+
+                XmlSerializer xmlSerializer = new XmlSerializer(registro.GetType());
+                xmlSerializer.Serialize(Console.Out, registro);
+                var destino = CreatePdfsDir("XMLFiles");
+                using (StreamWriter writer = new StreamWriter(destino))
+                {
+                    xmlSerializer.Serialize(writer, registro);
+                }
+
+                return registro;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        private string CreatePdfsDir(string pastaRaiz)
+        {
+            var path = pastaRaiz;
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            return path;
         }
 
         private List<string> changeFileExtensionAndGetFileContend(string filePath)

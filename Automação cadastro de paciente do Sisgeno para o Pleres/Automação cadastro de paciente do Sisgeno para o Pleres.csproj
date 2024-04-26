@@ -172,6 +172,7 @@
   <ItemGroup>
     <Compile Include="ConversorXmlSisgenoParaXmlPleres.cs" />
     <Compile Include="GerenciadorDeArquivos.cs" />
+    <Compile Include="Modelos XML\TemplateAlvaro.cs" />
     <Compile Include="Modelos XML\XMLgenConectPleres.cs" />
     <Compile Include="Modelos XML\XMLsisgeno.cs" />
     <Compile Include="Objetos\Paciente.cs" />
